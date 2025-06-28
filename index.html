@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Tracker</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<h1>Daily Mood Tracker</h1>
+<p>How are you feeling today?</p>
+<div id="mood-buttons">
+    <button onclick="logMood('😊')">😊</button>
+    <button onclick="logMood('😐')">😐</button>
+    <button onclick="logMood('😢')">😢</button>
+</div>
+
+<h2>Mood History</h2>
+<ul id="mood-history"></ul>
+
+<button onclick="sendNotification()">Send Reminder</button>
+
+<script src="app.js"></script>
+</body>
+</html>
