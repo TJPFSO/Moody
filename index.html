@@ -18,6 +18,7 @@
             <button onclick="logMood('😐')">😐</button>
             <button onclick="logMood('😢')">😢</button>
         </div>
+
     </section>
 
     <!-- Top-Right: Sliders & Save -->
@@ -26,15 +27,15 @@
         <div class="slider-container">
             <div class="slider-group">
                 <img src="https://em-content.zobj.net/thumbs/120/apple/354/smiling-face_263a-fe0f.png" class="emoji" alt="Happy">
-                <input type="range" id="happySlider" min="0" max="10" value="5">
+                <label for="happySlider"></label><input type="range" id="happySlider" min="0" max="10" value="5">
             </div>
             <div class="slider-group">
                 <img src="https://em-content.zobj.net/thumbs/120/apple/354/crying-face_1f622.png" class="emoji" alt="Sad">
-                <input type="range" id="sadSlider" min="0" max="10" value="5">
+                <label for="sadSlider"></label><input type="range" id="sadSlider" min="0" max="10" value="5">
             </div>
             <div class="slider-group">
                 <img src="https://em-content.zobj.net/thumbs/120/apple/354/angry-face_1f620.png" class="emoji" alt="Angry">
-                <input type="range" id="angrySlider" min="0" max="10" value="5">
+                <label for="angrySlider"></label><input type="range" id="angrySlider" min="0" max="10" value="5">
             </div>
         </div>
         <button onclick="saveMood()" class="save-btn">Save Mood</button>
@@ -57,9 +58,16 @@
     </section>
 
     <!-- Bottom-Right: Mood History & Reminder -->
+
     <section class="quad quad-br">
         <h2>Mood History</h2>
-        <ul id="mood-history"></ul>
+        <
+
+        <!-- !!!! Added scroll container so history doesn't push page down -->
+        <div id="mood-history-scroll" class="scroll-panel">
+            <ul id="mood-history"></ul>
+        </div>
+
         <button onclick="sendNotification()">🔔 Send Reminder</button>
     </section>
 </div>

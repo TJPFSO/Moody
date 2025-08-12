@@ -120,3 +120,16 @@ input[type="checkbox"] {
     width: 24px;
     height: 24px;
 }
+/* TALK ABOUT THIS IN MILESTONE */
+/*  Scroll panel for Mood History */
+.scroll-panel {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: .5rem;
+}
+.scroll-panel::-webkit-scrollbar { width: 8px; }
+.scroll-panel::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #c9d1c8;
+}
+.scroll-panel::-webkit-scrollbar-track { background: transparent; }
