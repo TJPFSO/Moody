@@ -42,7 +42,7 @@ function saveMood() {
     alert('Mood saved!');
 }
 
-// Show Calendar of past mood entries
+
 function showCalendar() {
     const calendar = document.getElementById('calendar');
     const list = document.getElementById('calendarEntries');
