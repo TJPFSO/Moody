@@ -1,76 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="style.css">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Mood Tracker</title>
-    <link rel="manifest" href="manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moody</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="./manifest.webmanifest" />
 </head>
 <body>
-<div id="dashboard-grid">
-    <!-- Top-Left: Mood Buttons -->
-    <section id="mood-buttons" class="quad quad-tl">
-        <h1 class="title">Daily Mood Tracker</h1>
-        <p>How are you feeling today?</p>
-        <div>
-            <button onclick="logMood('😊')">😊</button>
-            <button onclick="logMood('😐')">😐</button>
-            <button onclick="logMood('😢')">😢</button>
+
+<!-- !!!! Sticky top bar (Facebook-style) -->
+<header class="navbar"> <!-- !!!! -->
+    <div class="nav-left">
+        <div class="logo">😌 Moody</div>
+    </div>
+    <div class="nav-center">
+        <input class="search" type="search" placeholder="Search moods..." />
+    </div>
+    <div class="nav-right">
+        <button class="icon-btn" onclick="sendNotification()" title="Reminders">🔔</button>
+        <div class="avatar">🙂</div>
+    </div>
+</header>
+
+<!-- !!!! Two-column app layout -->
+<main class="layout"> <!-- !!!! -->
+    <!-- RIGHT SIDEBAR (like FB’s right rail) -->
+    <aside class="sidebar"> <!-- !!!! -->
+        <div class="card">
+            <h3>Calendar</h3>
+            <p id="lastEntry">Last mood entry: —</p>
+            <button class="primary" onclick="showCalendar()">Open Calendar</button>
         </div>
 
-    </section>
+        <div class="card">
+            <h3>Reminders</h3>
+            <p>Turn on a gentle nudge to track your mood.</p>
+            <button class="secondary" onclick="sendNotification()">🔔 Send Reminder</button>
+        </div>
+    </aside>
 
-    <!-- Top-Right: Sliders & Save -->
-    <section class="quad quad-tr">
-        <h2>Adjust Mood Levels</h2>
-        <div class="slider-container">
-            <div class="slider-group">
-                <img src="https://em-content.zobj.net/thumbs/120/apple/354/smiling-face_263a-fe0f.png" class="emoji" alt="Happy">
-                <label for="happySlider"></label><input type="range" id="happySlider" min="0" max="10" value="5">
+    <!-- MAIN FEED -->
+    <section class="feed"> <!-- !!!! -->
+        <!-- Composer card (like FB post composer) -->
+        <div class="card">
+            <h3>Log Your Mood</h3>
+
+            <!-- Quick emoji buttons (uses logMood) -->
+            <div id="mood-buttons" class="emoji-row">
+                <button class="emoji" onclick="logMood('😊')">😊</button>
+                <button class="emoji" onclick="logMood('😐')">😐</button>
+                <button class="emoji" onclick="logMood('😢')">😢</button>
+                <button class="emoji" onclick="logMood('😤')">😤</button>
+                <button class="emoji" onclick="logMood('🥱')">🥱</button>
             </div>
-            <div class="slider-group">
-                <img src="https://em-content.zobj.net/thumbs/120/apple/354/crying-face_1f622.png" class="emoji" alt="Sad">
-                <label for="sadSlider"></label><input type="range" id="sadSlider" min="0" max="10" value="5">
+
+            <!-- Sliders (IDs kept for saveMood) -->
+            <div class="sliders">
+                <label>Happy
+                    <input type="range" id="happySlider" min="0" max="10" value="5" />
+                </label>
+                <label>Sad
+                    <input type="range" id="sadSlider" min="0" max="10" value="0" />
+                </label>
+                <label>Angry
+                    <input type="range" id="angrySlider" min="0" max="10" value="0" />
+                </label>
             </div>
-            <div class="slider-group">
-                <img src="https://em-content.zobj.net/thumbs/120/apple/354/angry-face_1f620.png" class="emoji" alt="Angry">
-                <label for="angrySlider"></label><input type="range" id="angrySlider" min="0" max="10" value="5">
+
+            <!-- Checkboxes (class name kept for getSelectedMoods) -->
+            <div class="checkboxes tag-grid">
+                <label><input type="checkbox" value="Calm" /> Calm</label>
+                <label><input type="checkbox" value="Anxious" /> Anxious</label>
+                <label><input type="checkbox" value="Focused" /> Focused</label>
+                <label><input type="checkbox" value="Tired" /> Tired</label>
+                <label><input type="checkbox" value="Motivated" /> Motivated</label>
+                <label><input type="checkbox" value="Stressed" /> Stressed</label>
+            </div>
+
+            <div class="composer-actions">
+                <button class="primary" onclick="saveMood()">Save Mood</button>
             </div>
         </div>
-        <button onclick="saveMood()" class="save-btn">Save Mood</button>
-        <p id="lastEntry" class="timestamp">Last mood entry: None</p>
-    </section>
 
-    <section class="quad quad-bl checkboxes">
-        <h2>Overall Mood</h2>
-        <label><input type="checkbox" value="Happy"> Happy</label><br>
-        <label><input type="checkbox" value="Sad"> Sad</label><br>
-        <label><input type="checkbox" value="Angry"> Angry</label><br>
-        <label><input type="checkbox" value="Anxious"> Anxious</label><br>
-        <label><input type="checkbox" value="Excited"> Excited</label><br>
-        <button onclick="showCalendar()" class="calendar-btn">📅 Mood Calendar</button>
-        <div id="calendar" class="calendar" style="display:none;">
-            <h3>Mood Calendar</h3>
-            <ul id="calendarEntries"></ul>
-            <button onclick="hideCalendar()">Close</button>
+        <!-- History (feed-style card with inner scroll) -->
+        <div class="card">
+            <h3>Mood History</h3>
+            <!-- !!!! dedicated scroll area so page doesn’t stretch -->
+            <div id="mood-history-scroll" class="scroll-panel"> <!-- !!!! -->
+                <ul id="mood-history"></ul>
+            </div>
         </div>
     </section>
+</main>
 
-    <!-- Bottom-Right: Mood History & Reminder -->
-
-    <section class="quad quad-br">
-        <h2>Mood History</h2>
-        <
-
-        <!-- !!!! Added scroll container so history doesn't push page down -->
-        <div id="mood-history-scroll" class="scroll-panel">
-            <ul id="mood-history"></ul>
+<!-- Calendar Drawer (uses your existing IDs & functions) -->
+<section id="calendar" class="calendar-drawer" style="display:none;">
+    <div class="calendar-card">
+        <div class="calendar-head">
+            <h3>Saved Mood Entries</h3>
+            <button class="icon-btn" onclick="hideCalendar()" title="Close">✖</button>
         </div>
+        <ul id="calendarEntries"></ul>
+    </div>
+</section>
 
-        <button onclick="sendNotification()">🔔 Send Reminder</button>
-    </section>
-</div>
 <script src="app.js"></script>
 </body>
 </html>
