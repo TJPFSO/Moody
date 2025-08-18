@@ -51,6 +51,8 @@ function renderLastEntryLabel() {
         label.textContent = 'Last mood entry: —';
         return;
     }
+
+    //milestone code
     // find latest by Date
     const latest = entries
         .map(([date, e]) => ({ date, ts: new Date(`${date} ${e.time}`).getTime(), e }))
