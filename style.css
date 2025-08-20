@@ -175,3 +175,60 @@ button { font: inherit; cursor: pointer; }
     .sliders { grid-template-columns: 1fr; }
     .tag-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* Calendar interactive styles */
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+}
+.cal-weekdays {
+    font-weight: 600;
+    color: var(--muted);
+    text-align: center;
+}
+.cal-days .day {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 10px;
+    min-height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+}
+.cal-days .day.outside { opacity: 0.5; }
+.cal-days .day.today { outline: 2px solid var(--primary); }
+.cal-days .day.selected { border-color: var(--primary); }
+.cal-days .num { font-weight: 600; width: 22px; }
+.cal-days .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-left: auto;
+}
+.mood-good .dot { background: #10b981; } /* green */
+.mood-meh .dot { background: #f59e0b; } /* amber */
+.mood-bad .dot { background: #ef4444; } /* red */
+
+.cal-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
+.cal-legend { display: flex; gap: 12px; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
+.cal-selected { display: grid; gap: 8px; }
+.cal-selected .emoji-row { display: flex; gap: 6px; }
+.cal-selected .emoji.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(34,197,94,.2) inset;
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+    .cal-weekdays{font-weight:600;color:var(--muted);text-align:center}
+    .cal-days .day{display:flex;align-items:center;gap:6px;padding:10px;min-height:46px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer}
+    .cal-days .day.outside{opacity:.5}
+    .cal-days .day.today{outline:2px solid var(--primary);outline-offset:1px}
+    .cal-days .day.selected{border-color:var(--primary);box-shadow:0 0 0 2px rgba(34,197,94,.15) inset}
+    .cal-days .num{font-weight:600;width:22px}
+    .cal-days .dot{width:8px;height:8px;border-radius:50%;margin-left:auto}
+    .mood-good .dot{background:#10b981}.mood-meh .dot{background:#f59e0b}.mood-bad .dot{background:#ef4444}
+
+}
+
