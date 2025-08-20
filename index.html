@@ -105,10 +105,40 @@
                 <h3 id = "calTitle">Month YYYY</h3>
                 <button class="icon-btn" id = "nextMonth" aria-label="Next month"></button>
             </div>
+
+            <!-- weekday labels-->
+            <div class = "cal-grid cal-weekdays">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+            </div>
             <h3>Saved Mood Entries</h3>
             <button class="icon-btn" onclick="hideCalendar()" title="Close">✖</button>
         </div>
+
+        <div id="calGrid" class ="cal-grid cal-days" aria-live="polite"></div>
         <ul id="calendarEntries"></ul>
+        <!-- footer: legend + quick log -->
+        <div class="cal-footer">
+            <div class="cal-legend">
+                <span><span class="dot mood-good"></span> Good</span>
+                <span><span class="dot mood-meh"></span> Meh</span>
+                <span><span class="dot mood-bad"></span> Bad</span>
+            </div>
+            <div class="cal-selected" id="calSelected">
+                <div class="cal-date" id="selectedDateLabel">—</div>
+                <div class="emoji-row">
+                    <button class="emoji" data-cal-emoji="😊">😊</button>
+                    <button class="emoji" data-cal-emoji="😐">😐</button>
+                    <button class="emoji" data-cal-emoji="😢">😢</button>
+                    <button class="emoji" data-cal-emoji="😤">😤</button>
+                    <button class="emoji" data-cal-emoji="🥱">🥱</button>
+                </div>
+                <textarea id="calNote" rows="3" placeholder="Optional note…"></textarea>
+                <div class="row actions">
+                    <button class="primary" id="calSave">Save</button>
+                    <button class="secondary" id="calDelete">Delete</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
