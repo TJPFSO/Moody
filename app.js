@@ -145,4 +145,191 @@ function sendNotification() {
 document.addEventListener('DOMContentLoaded', function () {
     renderQuickHistory();
     renderLastEntryLabel();
+    /* Calendar: minimal wiring */
+    (() => {
+        const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+        const LS_KEY = 'moody.entries';
+        const today = new Date();
+        const state = {y: today.getFullYear(), m: today.getMonth(), sel: iso(today)};
+
+        // open/close (uses your buttons)
+        window.showCalendar = () => {
+            $('#calendar').style.display = 'grid';
+            init();
+            render();
+        };
+        window.hideCalendar = () => {
+            $('#calendar').style.display = 'none';
+        };
+
+        let inited = false;
+
+        function init() {
+            if (inited) return;
+            const prev = $('#prevMonth'), next = $('#nextMonth');
+            prev && prev.addEventListener('click', () => {
+                state.m--;
+                if (state.m < 0) {
+                    state.m = 11;
+                    state.y--;
+                }
+                render();
+            });
+            next && next.addEventListener('click', () => {
+                state.m++;
+                if (state.m > 11) {
+                    state.m = 0;
+                    state.y++;
+                }
+                render();
+            });
+            // emoji toggle
+            $$('.cal-selected .emoji').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    $$('.cal-selected .emoji').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+            $('#calSave')?.addEventListener('click', saveSel);
+            $('#calDelete')?.addEventListener('click', delSel);
+            inited = true;
+        }
+
+        function render() {
+            $('#calTitle').textContent = new Date(state.y, state.m, 1).toLocaleString(undefined, {
+                month: 'long',
+                year: 'numeric'
+            });
+            const grid = $('#calGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const first = new Date(state.y, state.m, 1).getDay();
+            const dim = daysInMonth(state.y, state.m);
+            const prevDim = daysInMonth(state.m === 0 ? state.y - 1 : state.y, (state.m + 11) % 12);
+
+
+            for (let i = 0; i < 42; i++) {
+                const dnum = i - first + 1;
+                let y = state.y, m = state.m, day = dnum, outside = false;
+                if (dnum <= 0) {
+                    outside = true;
+                    m = (state.m + 11) % 12;
+                    y = state.m === 0 ? state.y - 1 : state.y;
+                    day = prevDim + dnum;
+                } else if (dnum > dim) {
+                    outside = true;
+                    m = (state.m + 1) % 12;
+                    y = state.m === 11 ? state.y + 1 : state.y;
+                    day = dnum - dim;
+                }
+
+                const d = new Date(y, m, day), id = iso(d);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'day';
+                if (outside) btn.classList.add('outside');
+                if (id === iso(today)) btn.classList.add('today');
+                if (id === state.sel) btn.classList.add('selected');
+                btn.dataset.iso = id;
+                btn.innerHTML = `<span class="num">${day}</span><span class="dot"></span>`;
+                const e = get(id);
+                if (e?.emoji) btn.classList.add(moodClass(e.emoji));
+                btn.addEventListener('click', () => {
+                    state.sel = id;
+                    $$('.day.selected').forEach(x => x.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    fillPanel();
+                });
+                grid.appendChild(btn);
+            }
+            fillPanel();
+        }
+
+        function fillPanel() {
+            const d = new Date(state.sel + 'T00:00:00');
+            const e = get(state.sel);
+            $('#selectedDateLabel') && ($('#selectedDateLabel').textContent = d.toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            }));
+            $('#calNote') && ($('#calNote').value = e?.note || '');
+            $$('.cal-selected .emoji').forEach(b => b.classList.remove('active'));
+            if (e?.emoji) {
+                const b = $(`.cal-selected .emoji[data-cal-emoji="${e.emoji}"]`);
+                b && b.classList.add('active');
+            }
+        }
+
+        function saveSel() {
+            const btn = $('.cal-selected .emoji.active');
+            const emoji = btn ? btn.dataset.calEmoji : undefined;
+            const note = $('#calNote') ? $('#calNote').value.trim() : '';
+            if (!emoji && !note) {
+                return;
+            }
+            set(state.sel, {emoji, note});
+            const dayBtn = $(`.day[data-iso="${state.sel}"]`);
+            if (dayBtn) {
+                dayBtn.classList.remove('mood-good', 'mood-meh', 'mood-bad');
+                if (emoji) dayBtn.classList.add(moodClass(emoji));
+            }
+        }
+
+        function delSel() {
+            del(state.sel);
+            const dayBtn = $(`.day[data-iso="${state.sel}"]`);
+            if (dayBtn) {
+                dayBtn.classList.remove('mood-good', 'mood-meh', 'mood-bad');
+            }
+            $('#calNote') && ($('#calNote').value = '');
+            $$('.cal-selected .emoji').forEach(b => b.classList.remove('active'));
+        }
+
+        // storage
+        function get(id) {
+            try {
+                return JSON.parse(localStorage.getItem(LS_KEY) || '{}')[id] || null;
+            } catch {
+                return null;
+            }
+        }
+
+        function set(id, val) {
+            const all = safeAll();
+            all[id] = val;
+            localStorage.setItem(LS_KEY, JSON.stringify(all));
+        }
+
+        function del(id) {
+            const all = safeAll();
+            delete all[id];
+            localStorage.setItem(LS_KEY, JSON.stringify(all));
+        }
+
+        function safeAll() {
+            try {
+                return JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+            } catch {
+                return {};
+            }
+        }
+
+        // utils
+        function iso(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function daysInMonth(y, m0) {
+            return new Date(y, m0 + 1, 0).getDate();
+        }
+
+        function moodClass(e) {
+            if (e === '😊') return 'mood-good';
+            if (e === '😐') return 'mood-meh';
+            return 'mood-bad';
+        }
+    })();
 });
