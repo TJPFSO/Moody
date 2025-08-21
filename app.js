@@ -106,22 +106,7 @@ function saveMood() {
     alert('Mood saved!');
 }
 
-function showCalendar() {
-    const calendar = document.getElementById('calendar');
-    const list = document.getElementById('calendarEntries');
-    list.innerHTML = '';
 
-
-    moodLog = loadMoodLog();
-
-    for (const [date, entry] of Object.entries(moodLog)) {
-        const item = document.createElement('li');
-        item.innerText = `${date} (${entry.time}) - Happy: ${entry.happy}, Sad: ${entry.sad}, Angry: ${entry.angry}, Moods: ${entry.moods.join(', ')}`;
-        list.appendChild(item);
-    }
-
-    calendar.style.display = 'block';
-}
 
 function hideCalendar() {
     document.getElementById('calendar').style.display = 'none';
@@ -317,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // utils
+        // utils/
         function iso(d) {
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
