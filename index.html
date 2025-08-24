@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="style.css">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,7 +18,6 @@
         <input class="search" type="search" placeholder="Search moods..." />
     </div>
     <div class="nav-right">
-
         <div class="avatar">🙂</div>
     </div>
 </header>
@@ -44,7 +41,6 @@
 
     <!-- MAIN FEED -->
     <section class="feed">
-
         <div class="card">
             <h3>Log Your Mood</h3>
 
@@ -96,35 +92,30 @@
     </section>
 </main>
 
-<!-- Calendar Drawer  -->
+<!-- Calendar Drawer -->
 <section id="calendar" class="calendar-drawer" style="display:none;">
     <div class="calendar-card">
 
+        <!-- Header: month nav + close -->
         <div class="calendar-head">
-            <div class ="cal-nav">
-                <button class = "icon-btn" id="prevMonth" aria-label="Previous month"></button>
-                <h3 id = "calTitle">Month YYYY</h3>
-                <button class="icon-btn" id = "nextMonth" aria-label="Next month"></button>
-
+            <div class="cal-nav">
+                <button class="icon-btn" id="prevMonth" aria-label="Previous month">‹</button>
+                <h3 id="calTitle">Month YYYY</h3>
+                <button class="icon-btn" id="nextMonth" aria-label="Next month">›</button>
             </div>
+            <button class="icon-btn" onclick="hideCalendar()" title="Close">✖</button>
         </div>
-        <button class="icon-btn" onclick="hideCalendar()" title="Close">✖</button>
-    </div>
 
-            <!-- weekday labels-->
-    <div class="cal-grid cal-weekdays">
-        <div>Sun</div><div>Mon</div><div>Tue</div>
-        <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-    </div>
+        <!-- Weekday labels (exactly 7; sibling of header) -->
+        <div class="cal-grid cal-weekdays">
+            <div>Sun</div><div>Mon</div><div>Tue</div>
+            <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
 
+        <!-- Month days render target (sibling of weekdays) -->
+        <div id="calGrid" class="cal-grid cal-days" aria-live="polite"></div>
 
-            <div id="calGrid" class="cal-grid cal-days" aria-live="polite"></div>
-
-
-
-
-
-        <!-- footer: legend + quick log -->
+        <!-- Footer: legend + quick log -->
         <div class="cal-footer">
             <div class="cal-legend">
                 <span><span class="dot mood-good"></span> Good</span>
@@ -147,6 +138,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
