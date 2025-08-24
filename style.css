@@ -154,7 +154,7 @@ button { font: inherit; cursor: pointer; }
     border: 1px solid var(--border, #e5e7eb);
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,.15);
-    display: grid; grid-template-rows: auto 1fr;
+    display: grid; grid-template-rows: auto auto 1fr auto;
 }
 .calendar-head {
     display: flex; align-items: center; justify-content: space-between;
@@ -184,9 +184,13 @@ button { font: inherit; cursor: pointer; }
     margin-top: 8px;
 }
 .cal-weekdays {
-    font-weight: 600;
-    color: var(--muted);
-    text-align: center;
+    display:grid;
+    grid-template-columns:repeat(7, minmax(0,1fr));
+    gap:8px;
+    padding:10px 16px 0;
+    text-align:center;
+    font-weight:600;
+    color:var(--muted);
 }
 .cal-days .day {
     display: flex;
@@ -220,15 +224,5 @@ button { font: inherit; cursor: pointer; }
 .cal-selected .emoji.active {
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(34,197,94,.2) inset;
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
-    .cal-weekdays{font-weight:600;color:var(--muted);text-align:center}
-    .cal-days .day{display:flex;align-items:center;gap:6px;padding:10px;min-height:46px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer}
-    .cal-days .day.outside{opacity:.5}
-    .cal-days .day.today{outline:2px solid var(--primary);outline-offset:1px}
-    .cal-days .day.selected{border-color:var(--primary);box-shadow:0 0 0 2px rgba(34,197,94,.15) inset}
-    .cal-days .num{font-weight:600;width:22px}
-    .cal-days .dot{width:8px;height:8px;border-radius:50%;margin-left:auto}
-    .mood-good .dot{background:#10b981}.mood-meh .dot{background:#f59e0b}.mood-bad .dot{background:#ef4444}
-
 }
 
