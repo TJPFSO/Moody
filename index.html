@@ -6,6 +6,24 @@
     <title>Moody</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="manifest" href="./manifest.webmanifest" />
+
+    <style>
+        .cal-days .has-mood{position: relative;}
+        .cal-days .has-mood::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+    </style>
+
+
 </head>
 <body>
 
