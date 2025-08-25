@@ -177,6 +177,22 @@
         try{return JSON.parse(localStorage.getItem(STORE_KEY)) || {};}
         catch{return{};}
     }
+    function saveStore(obj) {
+        localStorage.setItme(STORE_KEY, JSON.stringify(obj));
+    }
+    function addMoodToDate(dateKey, payload) {
+        const s = loadStore();
+        s[dateKey] = s[dateKey] || [];
+        s[dateKey].push({ ...payload, ts: Date.now() });
+        saveStore(s);
+    }
+    function getMarkedDatesSet() {
+        return new Set(Object.keys(loadStore()));
+    }
+
+    //event bus
+    function emit(type, detail) {window.dispatchEvent(new CustomEvent(type, {detail }));}
+    function on(type, fn) {window.addEventListener(type, fn);}
 
 </script>
 
