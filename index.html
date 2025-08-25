@@ -194,6 +194,26 @@
     function emit(type, detail) {window.dispatchEvent(new CustomEvent(type, {detail }));}
     function on(type, fn) {window.addEventListener(type, fn);}
 
+    //augmentation safeguard for existing functions
+    {function patchGlobals() {
+        const originalSaveMood = window.saveMood;
+        if(typeof originalSaveMood === 'function') {
+            window.saveMood = function patchedSaveMood() {
+                const result = originalSaveMood.apply(this, arguments);
+                const today = isoDate;
+                addMoodToDate(today, {source: "home", mood: "slider/checkbox"});
+                emit("mood:added", {date: today, source: "home"});
+                updateLastEntryUI(today);
+                return result;
+            };
+        }
+
+
+    }
+
+
+    }
+
 </script>
 
 <script src="app.js"></script>
